@@ -57,15 +57,15 @@ body {
     background:
         radial-gradient(
             circle at 50% 20%,
-            rgba(100, 52, 170, 0.18),
+            rgba(25, 45, 100, 0.20),
             transparent 40%
         ),
         radial-gradient(
             circle at 10% 80%,
-            rgba(90, 35, 150, 0.06),
+            rgba(15, 35, 85, 0.15),
             transparent 35%
         ),
-        var(--background);
+        #050914;
 
     color: var(--white);
 
@@ -1581,7 +1581,7 @@ body {
 
     letter-spacing: .15px;
 
-    color: rgba(65,105,225,.100);
+    color: rgba(255, 255, 255, 0.92);
 
     margin-bottom: 38px;
 
