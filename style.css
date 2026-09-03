@@ -1,30 +1,42 @@
-/* =========================================================
-   CONFESSION WEBSITE — STYLE.CSS
-   ========================================================= */
+```css
+/* ============================================================
+   FOR YOU, AS ALWAYS
+   Main Stylesheet
+   ============================================================ */
+
+
+/* ============================================================
+   1. ROOT VARIABLES
+   ============================================================ */
 
 :root {
-    --bg: #08040f;
-    --bg-light: #11091d;
 
+    --background: #0b0614;
+    --background-light: #130a22;
     --purple: #9b6cff;
-    --light-purple: #cdb7ff;
-    --soft-purple: #b993ff;
+    --light-purple: #c7a6ff;
+    --soft-purple: #a98cff;
+    --lavender: #d8c2ff;
 
-    --rose: #ff8fb3;
-    --rose-light: #ffc0d4;
+    --white: #f8f4ff;
+    --soft-white: rgba(248, 244, 255, 0.78);
 
-    --white: #ffffff;
-    --soft-white: #f5efff;
-    --muted-white: #d8cfee;
+    --glow: rgba(155, 108, 255, 0.7);
+    --soft-glow: rgba(155, 108, 255, 0.25);
+
+    --rose: #d978a9;
+    --rose-light: #f1a8ca;
 
     --serif: "Cormorant Garamond", Georgia, serif;
     --sans: "Montserrat", Arial, sans-serif;
+
+    --transition: 0.8s cubic-bezier(.2,.8,.2,1);
 }
 
 
-/* =========================================================
-   RESET
-   ========================================================= */
+/* ============================================================
+   2. RESET
+   ============================================================ */
 
 * {
     margin: 0;
@@ -32,25 +44,28 @@
     box-sizing: border-box;
 }
 
+
 html {
     scroll-behavior: smooth;
 }
 
+
 body {
+
     min-height: 100vh;
 
     background:
         radial-gradient(
             circle at 50% 20%,
-            rgba(100, 52, 170, 0.16),
-            transparent 38%
+            rgba(100, 52, 170, 0.18),
+            transparent 40%
         ),
         radial-gradient(
             circle at 10% 80%,
-            rgba(90, 35, 150, 0.10),
+            rgba(90, 35, 150, 0.12),
             transparent 35%
         ),
-        #08040f;
+        var(--background);
 
     color: var(--white);
 
@@ -60,36 +75,12 @@ body {
 }
 
 
-/* =========================================================
-   BACKGROUND ATMOSPHERE
-   ========================================================= */
+/* ============================================================
+   3. BACKGROUND ATMOSPHERE
+   ============================================================ */
 
-body::before {
-    content: "";
-    position: fixed;
+.background-effects {
 
-    inset: 0;
-
-    pointer-events: none;
-
-    background:
-        radial-gradient(
-            circle at var(--mouse-x, 50%)
-            var(--mouse-y, 50%),
-            rgba(145, 92, 255, 0.08),
-            transparent 28%
-        );
-
-    z-index: -1;
-}
-
-
-/* =========================================================
-   PARTICLES
-   ========================================================= */
-
-#particles,
-#fallingEffects {
     position: fixed;
 
     inset: 0;
@@ -100,116 +91,220 @@ body::before {
     pointer-events: none;
 
     overflow: hidden;
-}
 
-#particles {
     z-index: 0;
 }
 
-#fallingEffects {
-    z-index: 1;
+
+/* Large atmospheric glow */
+
+.background-effects::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 600px;
+    height: 600px;
+
+    left: 50%;
+    top: 30%;
+
+    transform: translate(-50%, -50%);
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(118, 67, 194, 0.14),
+            transparent 70%
+        );
+
+    filter: blur(40px);
+
+    animation:
+        atmospherePulse 8s ease-in-out infinite;
 }
 
 
+@keyframes atmospherePulse {
+
+    0%, 100% {
+        transform:
+            translate(-50%, -50%)
+            scale(0.9);
+        opacity: 0.6;
+    }
+
+    50% {
+        transform:
+            translate(-50%, -50%)
+            scale(1.15);
+        opacity: 1;
+    }
+}
+
+
+/* ============================================================
+   4. BACKGROUND PARTICLES
+   ============================================================ */
+
 .background-particle {
+
     position: absolute;
 
     border-radius: 50%;
 
-    background: #d9c2ff;
+    background: var(--lavender);
 
     box-shadow:
-        0 0 6px #a875ff,
-        0 0 12px rgba(170, 110, 255, 0.5);
+        0 0 5px var(--lavender),
+        0 0 12px var(--purple);
 
-    animation: particleFloat 7s ease-in-out infinite;
+    opacity: 0;
+
+    animation:
+        particlePulse
+        ease-in-out
+        infinite;
 }
 
-@keyframes particleFloat {
+
+@keyframes particlePulse {
 
     0% {
-        transform: translateY(0);
         opacity: 0;
+        transform: scale(0.5);
     }
 
-    30% {
+    50% {
         opacity: 0.8;
-    }
-
-    70% {
-        opacity: 0.5;
+        transform: scale(1);
     }
 
     100% {
-        transform: translateY(-35px);
         opacity: 0;
+        transform: scale(0.5);
     }
 }
 
 
-/* =========================================================
-   FALLING EFFECTS
-   ========================================================= */
+/* ============================================================
+   5. GLOWING DECORATIVE LINES
+   ============================================================ */
 
-.falling-item {
+.glow-line {
+
     position: absolute;
 
-    top: -40px;
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--purple),
+            transparent
+        );
+
+    box-shadow:
+        0 0 5px var(--purple),
+        0 0 15px var(--purple),
+        0 0 30px rgba(155,108,255,.5);
+
+    opacity: 0.4;
+
+    animation: lineGlow 5s ease-in-out infinite;
+}
+
+
+.line-one {
+
+    width: 45%;
+
+    top: 20%;
+    left: -10%;
+
+    transform: rotate(-18deg);
+}
+
+
+.line-two {
+
+    width: 35%;
+
+    right: -5%;
+    top: 65%;
+
+    transform: rotate(22deg);
+
+    animation-delay: 2s;
+}
+
+
+.line-three {
+
+    width: 30%;
+
+    left: 20%;
+    bottom: 10%;
+
+    transform: rotate(-8deg);
+
+    animation-delay: 3s;
+}
+
+
+@keyframes lineGlow {
+
+    0%, 100% {
+        opacity: 0.15;
+    }
+
+    50% {
+        opacity: 0.55;
+    }
+}
+
+
+/* ============================================================
+   6. FALLING EFFECTS
+   ============================================================ */
+
+.falling-object {
+
+    position: absolute;
+
+    top: -60px;
+
+    z-index: 1;
 
     pointer-events: none;
 
     user-select: none;
 
-    animation:
-        fallingDown linear forwards;
+    opacity: 0;
 
-    filter:
-        drop-shadow(
-            0 0 7px rgba(180, 120, 255, 0.8)
-        );
+    animation-name: falling;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+
+    text-shadow:
+        0 0 5px currentColor,
+        0 0 15px currentColor,
+        0 0 30px currentColor;
 }
 
-.fall-heart {
-    color: #d79aff;
-}
 
-.fall-rose {
-    filter:
-        drop-shadow(
-            0 0 8px rgba(255, 130, 180, 0.7)
-        );
-}
+/* Main falling animation */
 
-.fall-sparkle {
-    color: #ffffff;
-}
-
-.fall-star {
-    color: #cdb4ff;
-}
-
-.fall-dot {
-    color: #b987ff;
-}
-
-.fall-petal {
-    color: #ffabc7;
-}
-
-.fall-diamond {
-    color: #d4b8ff;
-}
-
-.fall-tiny {
-    color: #ffffff;
-}
-
-@keyframes fallingDown {
+@keyframes falling {
 
     0% {
+
         transform:
-            translateY(-50px)
-            rotate(0deg);
+            translate3d(0, -80px, 0)
+            rotate(0deg)
+            scale(0.7);
 
         opacity: 0;
     }
@@ -219,103 +314,443 @@ body::before {
     }
 
     50% {
+
         transform:
-            translateY(50vh)
-            translateX(30px)
-            rotate(180deg);
+            translate3d(
+                var(--drift),
+                50vh,
+                0
+            )
+            rotate(
+                calc(var(--rotation) / 2)
+            )
+            scale(1);
+
+        opacity: 0.65;
+    }
+
+    90% {
+        opacity: 0.25;
     }
 
     100% {
+
         transform:
-            translateY(115vh)
-            translateX(-40px)
-            rotate(360deg);
+            translate3d(
+                calc(var(--drift) * -0.4),
+                115vh,
+                0
+            )
+            rotate(var(--rotation))
+            scale(0.5);
 
         opacity: 0;
     }
 }
 
 
-/* =========================================================
-   ENTRANCE SCREEN
-   ========================================================= */
+/* Hearts */
 
-#entrance {
+.falling-heart {
+    color: #c792ff;
+}
+
+
+/* Roses */
+
+.falling-rose {
+
+    filter:
+        drop-shadow(
+            0 0 8px rgba(235, 130, 180, .8)
+        );
+}
+
+
+/* Sparkles */
+
+.falling-sparkle {
+
+    color: #e2d0ff;
+
+    animation-name: sparkleFall;
+}
+
+
+@keyframes sparkleFall {
+
+    0% {
+
+        transform:
+            translateY(-80px)
+            rotate(0deg)
+            scale(0);
+
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 1;
+        transform:
+            translateY(10vh)
+            rotate(120deg)
+            scale(1.2);
+    }
+
+    50% {
+
+        transform:
+            translate(
+                var(--drift),
+                55vh
+            )
+            rotate(300deg)
+            scale(0.8);
+    }
+
+    100% {
+
+        transform:
+            translate(
+                calc(var(--drift) * -0.5),
+                110vh
+            )
+            rotate(700deg)
+            scale(0);
+
+        opacity: 0;
+    }
+}
+
+
+/* Stars */
+
+.falling-star {
+
+    color: #d9c3ff;
+
+    animation-name: starFall;
+}
+
+
+@keyframes starFall {
+
+    0% {
+        transform:
+            translateY(-50px)
+            rotate(0deg);
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    50% {
+
+        transform:
+            translate(
+                var(--drift),
+                50vh
+            )
+            rotate(180deg);
+
+    }
+
+    100% {
+
+        transform:
+            translate(
+                calc(var(--drift) * -0.5),
+                110vh
+            )
+            rotate(500deg);
+
+        opacity: 0;
+    }
+}
+
+
+/* Small dots */
+
+.falling-dot {
+
+    color: #b996e8;
+
+    opacity: 0.5;
+
+    text-shadow:
+        0 0 8px #b996e8;
+}
+
+
+/* Petals */
+
+.falling-petal {
+
+    color: #dca3c5;
+
+    animation-name: petalFall;
+}
+
+
+@keyframes petalFall {
+
+    0% {
+
+        transform:
+            translateY(-60px)
+            rotate(0deg);
+
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 0.8;
+    }
+
+    30% {
+
+        transform:
+            translate(
+                calc(var(--drift) * -0.5),
+                30vh
+            )
+            rotate(120deg);
+    }
+
+    65% {
+
+        transform:
+            translate(
+                var(--drift),
+                70vh
+            )
+            rotate(280deg);
+    }
+
+    100% {
+
+        transform:
+            translate(
+                calc(var(--drift) * -0.3),
+                110vh
+            )
+            rotate(500deg);
+
+        opacity: 0;
+    }
+}
+
+
+/* Diamonds */
+
+.falling-diamond {
+
+    color: #aa8bff;
+
+    animation-name: diamondFall;
+}
+
+
+@keyframes diamondFall {
+
+    0% {
+
+        transform:
+            translateY(-70px)
+            rotate(0deg)
+            scale(0);
+
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 0.8;
+        transform:
+            translateY(10vh)
+            rotate(90deg)
+            scale(1);
+    }
+
+    100% {
+
+        transform:
+            translate(
+                var(--drift),
+                110vh
+            )
+            rotate(600deg)
+            scale(0.3);
+
+        opacity: 0;
+    }
+}
+
+
+/* Tiny particles */
+
+.falling-particle {
+
+    color: #d8c8ff;
+
+    font-size: 8px !important;
+
+    animation-name: tinyParticleFall;
+}
+
+
+@keyframes tinyParticleFall {
+
+    0% {
+        transform:
+            translateY(-40px)
+            scale(0);
+
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 0.7;
+    }
+
+    100% {
+
+        transform:
+            translate(
+                var(--drift),
+                110vh
+            )
+            scale(0);
+
+        opacity: 0;
+    }
+}
+
+
+/* ============================================================
+   7. ENTRANCE SCREEN
+   ============================================================ */
+
+.entrance-screen {
+
     position: fixed;
 
     inset: 0;
 
-    display: flex;
+    width: 100%;
+    height: 100vh;
 
-    align-items: center;
-    justify-content: center;
+    min-height: 600px;
+
+    display: flex;
 
     flex-direction: column;
 
+    justify-content: center;
+
+    align-items: center;
+
     text-align: center;
 
-    z-index: 20;
+    z-index: 100;
 
     background:
+
         radial-gradient(
             circle at center,
-            rgba(76, 34, 130, 0.25),
-            transparent 55%
+            rgba(82, 42, 137, 0.2),
+            transparent 40%
         ),
-        #08040f;
+
+        linear-gradient(
+            135deg,
+            #08040e,
+            #120820,
+            #08040e
+        );
 
     transition:
         opacity 1.2s ease,
-        visibility 1.2s ease;
+        transform 1.2s ease,
+        visibility 1.2s;
 }
 
-#entrance.opening {
+
+/* When opening */
+
+.entrance-screen.opening {
+
     opacity: 0;
+
+    transform: scale(1.15);
+
     visibility: hidden;
+
     pointer-events: none;
 }
 
 
-/* =========================================================
-   FLOATING ROSE
-   ========================================================= */
+/* ============================================================
+   8. FLOATING ENTRANCE ROSE
+   ============================================================ */
 
 .entrance-rose {
-    font-size: 45px;
 
-    margin-bottom: 15px;
+    position: absolute;
 
-    animation:
-        roseFloat 3s ease-in-out infinite;
+    top: 12%;
+
+    font-size: 48px;
 
     filter:
         drop-shadow(
-            0 0 15px rgba(255, 100, 170, 0.7)
+            0 0 8px rgba(230, 120, 180, .6)
+        )
+        drop-shadow(
+            0 0 20px rgba(155, 108, 255, .4)
         );
+
+    animation:
+        floatingRose
+        4s
+        ease-in-out
+        infinite;
+
+    z-index: 4;
 }
 
-@keyframes roseFloat {
 
-    0%,
-    100% {
-        transform: translateY(0);
+@keyframes floatingRose {
+
+    0%, 100% {
+
+        transform:
+            translateY(0)
+            rotate(-4deg);
+
     }
 
     50% {
-        transform: translateY(-12px);
+
+        transform:
+            translateY(-15px)
+            rotate(4deg);
+
     }
 }
 
 
-/* =========================================================
-   HEART BUTTON
-   ========================================================= */
+/* ============================================================
+   9. HEART ENTRANCE
+   ============================================================ */
 
-.heart-button {
+.heart-entrance {
+
     position: relative;
 
-    width: 170px;
-    height: 150px;
+    width: 210px;
+    height: 190px;
 
     border: none;
 
@@ -325,310 +760,203 @@ body::before {
 
     display: flex;
 
-    align-items: center;
     justify-content: center;
 
-    transition:
-        transform 0.4s ease;
-}
-
-
-/* Main heart */
-
-.heart-button::before {
-    content: "";
-
-    position: absolute;
-
-    width: 115px;
-    height: 115px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #b77aff,
-            #7540c9
-        );
-
-    transform:
-        rotate(-45deg);
-
-    border-radius:
-        25px 0 25px 0;
-
-    box-shadow:
-        0 0 15px #9b6cff,
-        0 0 35px rgba(155, 108, 255, 0.8),
-        0 0 70px rgba(155, 108, 255, 0.4);
-
-    transition:
-        transform 0.4s ease,
-        box-shadow 0.4s ease;
-}
-
-
-/* Heart circles */
-
-.heart-button::after {
-    content: "";
-
-    position: absolute;
-
-    width: 115px;
-    height: 115px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #b77aff,
-            #7540c9
-        );
-
-    border-radius: 50%;
-
-    top: 8px;
-    left: 27px;
-
-    box-shadow:
-        85px 0 0 -1px #7540c9;
-
-    pointer-events: none;
-}
-
-
-/* Hover */
-
-.heart-button:hover {
-    transform: scale(1.08);
-}
-
-.heart-button:hover::before {
-    box-shadow:
-        0 0 20px #c59aff,
-        0 0 50px rgba(155, 108, 255, 0.9),
-        0 0 100px rgba(155, 108, 255, 0.5);
-}
-
-
-/* Text inside heart */
-
-.heart-text {
-    position: relative;
+    align-items: center;
 
     z-index: 5;
+
+    transform: rotate(-45deg);
+
+    transition:
+        transform .5s ease;
+}
+
+
+.heart-entrance::before,
+.heart-entrance::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 140px;
+    height: 140px;
+
+    background:
+        radial-gradient(
+            circle at 30% 25%,
+            #b990ff,
+            #7042a9 45%,
+            #351651 100%
+        );
+
+    border:
+        1px solid rgba(216,194,255,.7);
+
+    box-shadow:
+
+        inset
+        0 0 25px
+        rgba(255,255,255,.08),
+
+        0 0 10px
+        rgba(170,120,255,.7),
+
+        0 0 30px
+        rgba(155,108,255,.55),
+
+        0 0 70px
+        rgba(155,108,255,.25);
+
+    border-radius: 70px 70px 12px 70px;
+
+    transition:
+        box-shadow .5s ease;
+}
+
+
+.heart-entrance::before {
+
+    top: 0;
+    left: 35px;
+}
+
+
+.heart-entrance::after {
+
+    top: 35px;
+    left: 0;
+}
+
+
+/* Heart center */
+
+.heart-content {
+
+    position: relative;
+
+    z-index: 10;
+
+    transform: rotate(45deg);
+
+    width: 150px;
+
+    pointer-events: none;
 
     display: flex;
 
     flex-direction: column;
 
+    align-items: center;
+
     gap: 5px;
+}
+
+
+.heart-content h1 {
+
+    font-family: var(--serif);
+
+    font-size: 42px;
+
+    font-weight: 600;
+
+    letter-spacing: 1px;
 
     color: white;
 
     text-shadow:
-        0 0 8px rgba(255,255,255,0.7);
 
-    pointer-events: none;
+        0 0 5px white,
+
+        0 0 15px var(--light-purple),
+
+        0 0 30px var(--purple);
 }
 
-.heart-title {
-    font-family: var(--serif);
 
-    font-size: 28px;
+.heart-small-text {
 
-    font-weight: 600;
-}
-
-.heart-subtitle {
     font-family: var(--sans);
 
-    font-size: 9px;
+    font-size: 8px;
 
     letter-spacing: 3px;
 
     text-transform: uppercase;
+
+    color: rgba(255,255,255,.7);
 }
 
 
-/* =========================================================
-   ENTRANCE DIVIDER
-   ========================================================= */
+/* Heart hover */
 
-.entrance-divider {
-    width: 150px;
+.heart-entrance:hover {
 
-    height: 1px;
+    transform:
+        rotate(-45deg)
+        scale(1.08);
+}
 
-    margin-top: 30px;
 
-    background:
-        linear-gradient(
-            to right,
-            transparent,
-            #a978ff,
-            transparent
-        );
+.heart-entrance:hover::before,
+.heart-entrance:hover::after {
 
     box-shadow:
-        0 0 10px #9b6cff;
+
+        inset
+        0 0 30px
+        rgba(255,255,255,.12),
+
+        0 0 15px
+        rgba(190,150,255,.9),
+
+        0 0 45px
+        rgba(155,108,255,.75),
+
+        0 0 100px
+        rgba(155,108,255,.4);
 }
 
 
-/* =========================================================
-   MAIN CONTENT
-   ========================================================= */
+/* Pulsing heart */
 
-#mainContent {
-    position: relative;
+.heart-entrance {
 
-    z-index: 3;
-
-    transition:
-        opacity 1.5s ease;
+    animation:
+        heartPulse
+        2.4s
+        ease-in-out
+        infinite;
 }
 
 
-/* =========================================================
-   INTRO SECTION
-   ========================================================= */
+@keyframes heartPulse {
 
-.intro {
-    min-height: 100vh;
+    0%, 100% {
+        filter:
+            drop-shadow(
+                0 0 5px rgba(155,108,255,.3)
+            );
+    }
 
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-    justify-content: center;
-
-    text-align: center;
-
-    padding: 100px 25px;
-}
-
-.intro-eyebrow {
-    color: #c9adff;
-
-    font-size: 10px;
-
-    letter-spacing: 6px;
-
-    text-transform: uppercase;
-
-    margin-bottom: 22px;
-
-    text-shadow:
-        0 0 8px rgba(199,166,255,0.4);
+    50% {
+        filter:
+            drop-shadow(
+                0 0 20px rgba(155,108,255,.7)
+            );
+    }
 }
 
 
-.intro-title {
-    font-family: var(--serif);
+/* ============================================================
+   10. TAP TEXT
+   ============================================================ */
 
-    font-size:
-        clamp(
-            55px,
-            9vw,
-            105px
-        );
+.tap-text {
 
-    font-weight: 500;
-
-    line-height: 0.95;
-
-    color: #ffffff;
-
-    text-shadow:
-        0 0 15px rgba(255,255,255,0.08),
-        0 0 45px rgba(155,108,255,0.2);
-}
-
-.intro-title .purple {
-    color: #c59aff;
-
-    text-shadow:
-        0 0 10px rgba(197,154,255,0.5),
-        0 0 30px rgba(155,108,255,0.4);
-}
-
-
-.intro-description {
-    max-width: 580px;
-
-    margin: 35px auto 0;
-
-    font-family: var(--serif);
-
-    font-size: 20px;
-
-    line-height: 1.7;
-
-    color: #f3ecff;
-
-    text-shadow:
-        0 0 8px rgba(255,255,255,0.12);
-}
-
-
-/* =========================================================
-   GLOW LINES
-   ========================================================= */
-
-.glow-lines {
-    width: min(650px, 80vw);
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 7px;
-
-    margin-top: 55px;
-}
-
-.glow-line {
-    height: 1px;
-
-    background:
-        linear-gradient(
-            to right,
-            transparent,
-            rgba(183,133,255,0.8),
-            transparent
-        );
-
-    box-shadow:
-        0 0 10px rgba(155,108,255,0.8);
-
-    opacity: 0.7;
-}
-
-.glow-line:nth-child(2) {
-    width: 70%;
-
-    margin: auto;
-
-    opacity: 0.4;
-}
-
-.glow-line:nth-child(3) {
-    width: 45%;
-
-    margin: auto;
-
-    opacity: 0.25;
-}
-
-
-/* =========================================================
-   READ ON
-   ========================================================= */
-
-.read-on {
-    margin-top: 45px;
-
-    color: #d7c2ff;
+    margin-top: 35px;
 
     font-size: 11px;
 
@@ -636,109 +964,475 @@ body::before {
 
     text-transform: uppercase;
 
-    cursor: pointer;
-
-    transition:
-        color 0.3s ease,
-        transform 0.3s ease;
-}
-
-.read-on:hover {
-    color: #ffffff;
-
-    transform: translateY(5px);
-
-    text-shadow:
-        0 0 12px #b68cff;
-}
-
-
-/* =========================================================
-   SCROLL INDICATOR
-   ========================================================= */
-
-.scroll-indicator {
-    margin-top: 20px;
-
-    width: 1px;
-
-    height: 50px;
-
-    background:
-        linear-gradient(
-            to bottom,
-            #b68cff,
-            transparent
-        );
+    color: rgba(216,194,255,.7);
 
     animation:
-        scrollPulse 2s ease-in-out infinite;
+        tapPulse
+        2s
+        ease-in-out
+        infinite;
+
+    z-index: 5;
 }
 
-@keyframes scrollPulse {
 
-    0%,
-    100% {
-        opacity: 0.3;
-        transform: scaleY(0.7);
+@keyframes tapPulse {
+
+    0%, 100% {
+        opacity: .4;
     }
 
     50% {
         opacity: 1;
-        transform: scaleY(1);
     }
 }
 
 
-/* =========================================================
-   CONFESSION SECTION
-   ========================================================= */
+/* ============================================================
+   11. ENTRANCE DIVIDER
+   ============================================================ */
 
-.confession {
-    position: relative;
+.entrance-divider {
 
-    max-width: 1000px;
+    display: flex;
 
-    margin: auto;
+    align-items: center;
 
-    padding:
-        150px 30px
-        130px;
+    gap: 15px;
+
+    margin-top: 20px;
+
+    opacity: .5;
 }
 
 
-.background-title {
-    position: absolute;
+.entrance-divider span {
 
-    top: 60px;
+    width: 50px;
 
-    left: 50%;
+    height: 1px;
 
-    transform: translateX(-50%);
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--purple)
+        );
+
+    box-shadow:
+        0 0 8px var(--purple);
+}
+
+
+.entrance-divider span:last-child {
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--purple),
+            transparent
+        );
+}
+
+
+.entrance-divider i {
+
+    color: var(--light-purple);
+
+    font-style: normal;
+
+    text-shadow:
+        0 0 10px var(--purple);
+}
+
+
+/* ============================================================
+   12. MAIN CONTENT
+   ============================================================ */
+
+.main-content {
+
+    position: relative;
+
+    z-index: 2;
+
+    opacity: 0;
+
+    transition:
+        opacity 1.5s ease;
+}
+
+
+.main-content.visible {
+
+    opacity: 1;
+}
+
+
+/* ============================================================
+   13. INTRO SECTION
+   ============================================================ */
+
+.intro-section {
+
+    min-height: 100vh;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    padding: 100px 25px;
+
+    position: relative;
+}
+
+
+.intro-content {
+
+    max-width: 900px;
 
     width: 100%;
 
-    text-align: center;
+    animation:
+        introAppear
+        1.5s
+        ease
+        both;
+}
+
+
+@keyframes introAppear {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(40px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0);
+
+    }
+}
+
+
+/* ============================================================
+   14. EYEBROW
+   ============================================================ */
+
+.eyebrow {
+
+    font-family: var(--sans);
+
+    text-transform: uppercase;
+
+    letter-spacing: 5px;
+
+    font-size: 11px;
+
+    color: var(--lavender);
+
+    margin-bottom: 20px;
+
+    text-shadow:
+        0 0 12px rgba(199,166,255,.7);
+
+}
+
+
+/* ============================================================
+   15. MAIN TITLE
+   ============================================================ */
+
+.main-title {
 
     font-family: var(--serif);
 
     font-size:
         clamp(
-            90px,
-            18vw,
-            210px
+            55px,
+            8vw,
+            110px
         );
 
-    color: rgba(255,255,255,0.025);
+    line-height: .95;
+
+    font-weight: 500;
+
+    letter-spacing: -2px;
+
+    color: var(--white);
+
+    text-shadow:
+        0 0 15px rgba(255,255,255,.08);
+}
+
+
+.main-title span {
+
+    color: var(--light-purple);
+
+    text-shadow:
+
+        0 0 5px var(--light-purple),
+
+        0 0 15px var(--purple),
+
+        0 0 40px rgba(155,108,255,.6);
+}
+
+
+/* ============================================================
+   16. INTRO DESCRIPTION
+   ============================================================ */
+
+.intro-description {
+
+    max-width: 580px;
+
+    margin:
+        35px
+        auto
+        0;
+
+    font-family: var(--serif);
+
+    font-size: 20px;
+
+    line-height: 1.7;
+
+    color: var(--soft-white);
+}
+
+
+/* ============================================================
+   17. INTRO LINES
+   ============================================================ */
+
+.intro-lines {
+
+    margin:
+        65px
+        auto
+        0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 18px;
+
+    width: min(600px, 90%);
+}
+
+
+.intro-line {
+
+    flex: 1;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--purple)
+        );
+
+    box-shadow:
+        0 0 8px var(--purple);
+
+    opacity: .6;
+}
+
+
+.intro-line.right {
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--purple),
+            transparent
+        );
+}
+
+
+.read-on {
+
+    color: var(--lavender);
+
+    font-size: 10px;
+
+    letter-spacing: 4px;
+
+    text-transform: uppercase;
+
+    cursor: pointer;
+
+    transition:
+        transform .3s ease,
+        text-shadow .3s ease;
+}
+
+
+.read-on:hover {
+
+    transform: translateY(4px);
+
+    text-shadow:
+        0 0 10px var(--light-purple),
+        0 0 25px var(--purple);
+}
+
+
+/* ============================================================
+   18. SCROLL INDICATOR
+   ============================================================ */
+
+.scroll-indicator {
+
+    margin-top: 35px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 5px;
+}
+
+
+.scroll-indicator span {
+
+    width: 8px;
+    height: 8px;
+
+    border-right: 1px solid var(--lavender);
+    border-bottom: 1px solid var(--lavender);
+
+    transform:
+        rotate(45deg);
+
+    animation:
+        arrowDown
+        1.8s
+        ease-in-out
+        infinite;
+}
+
+
+.scroll-indicator span:nth-child(2) {
+
+    animation-delay: .2s;
+
+    opacity: .5;
+}
+
+
+@keyframes arrowDown {
+
+    0%, 100% {
+        opacity: .2;
+        transform:
+            rotate(45deg)
+            translate(-2px,-2px);
+    }
+
+    50% {
+        opacity: 1;
+        transform:
+            rotate(45deg)
+            translate(3px,3px);
+    }
+}
+
+
+/* ============================================================
+   19. CONFESSION SECTION
+   ============================================================ */
+
+.confession-section {
+
+    position: relative;
+
+    min-height: 100vh;
+
+    padding:
+        150px
+        25px
+        120px;
+
+    overflow: hidden;
+}
+
+
+/* Huge faded title */
+
+.background-title {
+
+    position: absolute;
+
+    top: 100px;
+
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    white-space: nowrap;
+
+    font-family: var(--serif);
+
+    font-size:
+        clamp(
+            100px,
+            20vw,
+            300px
+        );
+
+    color: rgba(255,255,255,.025);
 
     pointer-events: none;
 
     user-select: none;
+
+    z-index: 0;
 }
 
 
-.section-label {
+.confession-content {
+
+    position: relative;
+
+    z-index: 2;
+
+    max-width: 900px;
+
+    margin: auto;
+
     text-align: center;
+}
+
+
+/* ============================================================
+   20. SECTION LABEL
+   ============================================================ */
+
+.section-label {
 
     font-size: 10px;
 
@@ -746,16 +1440,18 @@ body::before {
 
     letter-spacing: 6px;
 
-    color: #cdb7f5;
+    color: rgba(216,194,255,.45);
 
     margin-bottom: 30px;
-
-    text-shadow:
-        0 0 8px rgba(199,166,255,0.4);
 }
 
 
+/* ============================================================
+   21. CONFESSION HEADING
+   ============================================================ */
+
 .confession-heading {
+
     font-family: var(--serif);
 
     font-size:
@@ -769,83 +1465,114 @@ body::before {
 
     line-height: 1.12;
 
-    color: #ffffff;
+    color: var(--white);
 
     max-width: 800px;
 
     margin: auto;
 
-    text-align: center;
-
     text-shadow:
-        0 0 8px rgba(255,255,255,0.12),
-        0 0 25px rgba(155,108,255,0.18);
+        0 0 20px rgba(155,108,255,.08);
 }
 
 
-/* =========================================================
-   HEART DIVIDER
-   ========================================================= */
+/* ============================================================
+   22. HEART DIVIDER
+   ============================================================ */
 
 .heart-divider {
+
     display: flex;
 
     align-items: center;
 
-    justify-content: center;
+    gap: 20px;
 
-    gap: 15px;
+    width: min(600px, 90%);
 
-    margin: 50px auto;
-
-    color: #c39aff;
-
-    font-size: 15px;
-
-    text-shadow:
-        0 0 10px #9b6cff;
+    margin:
+        60px
+        auto
+        70px;
 }
 
-.heart-divider::before,
-.heart-divider::after {
-    content: "";
 
-    width: 100px;
+.divider-line {
+
+    flex: 1;
 
     height: 1px;
 
     background:
         linear-gradient(
-            to right,
+            90deg,
             transparent,
-            #9b6cff
+            rgba(155,108,255,.7)
         );
+
+    box-shadow:
+        0 0 8px
+        rgba(155,108,255,.6);
 }
 
-.heart-divider::after {
+
+.divider-line:last-child {
+
     background:
         linear-gradient(
-            to left,
-            transparent,
-            #9b6cff
+            90deg,
+            rgba(155,108,255,.7),
+            transparent
         );
 }
 
 
-/* =========================================================
-   LETTER
-   ========================================================= */
+.divider-heart {
+
+    color: var(--light-purple);
+
+    font-size: 18px;
+
+    text-shadow:
+        0 0 8px var(--purple),
+        0 0 20px var(--purple);
+
+    animation:
+        dividerBeat
+        2s
+        ease-in-out
+        infinite;
+}
+
+
+@keyframes dividerBeat {
+
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.25);
+    }
+}
+
+
+/* ============================================================
+   23. LETTER
+   ============================================================ */
 
 .letter {
-    max-width: 780px;
+
+    max-width: 720px;
 
     margin: auto;
 
-    padding-top: 20px;
+    text-align: left;
 }
 
 
 .letter-paragraph {
+
     font-family: var(--serif);
 
     font-size: 21px;
@@ -854,17 +1581,9 @@ body::before {
 
     letter-spacing: .15px;
 
-    color: #f5efff;
+    color: rgba(248,244,255,.78);
 
     margin-bottom: 38px;
-
-    text-shadow:
-        0 0 6px rgba(255,255,255,0.08);
-
-    opacity: 0;
-
-    transform:
-        translateY(30px);
 
     transition:
         opacity 1s ease,
@@ -872,7 +1591,21 @@ body::before {
 }
 
 
-.letter-paragraph.visible {
+/* ============================================================
+   24. SCROLL REVEAL
+   ============================================================ */
+
+.hidden-before-reveal {
+
+    opacity: 0;
+
+    transform:
+        translateY(35px);
+}
+
+
+.revealed {
+
     opacity: 1;
 
     transform:
@@ -880,308 +1613,491 @@ body::before {
 }
 
 
-/* =========================================================
-   HIDDEN MESSAGE
-   ========================================================= */
+/* ============================================================
+   25. HIDDEN MESSAGE
+   ============================================================ */
 
-.hidden-area {
+.hidden-message {
+
+    margin:
+        70px
+        0;
+
     text-align: center;
-
-    margin-top: 80px;
 }
 
-.hidden-button {
-    border: none;
+
+.reveal-button {
 
     background: transparent;
 
-    color: #b993ff;
+    border:
+        1px solid
+        rgba(199,166,255,.35);
+
+    color: var(--lavender);
+
+    padding:
+        14px
+        25px;
+
+    border-radius: 50px;
 
     font-family: var(--sans);
 
     font-size: 10px;
 
-    letter-spacing: 3px;
+    letter-spacing: 2px;
 
     text-transform: uppercase;
 
     cursor: pointer;
 
     transition:
-        color 0.3s ease,
-        text-shadow 0.3s ease;
-}
+        all .4s ease;
 
-.hidden-button:hover {
-    color: #ffffff;
-
-    text-shadow:
-        0 0 12px #a875ff;
+    box-shadow:
+        0 0 15px
+        rgba(155,108,255,.08);
 }
 
 
-.hidden-message {
-    max-width: 550px;
+.reveal-button:hover {
 
-    margin: 25px auto 0;
+    border-color:
+        var(--light-purple);
 
-    font-family: var(--serif);
+    box-shadow:
+        0 0 15px
+        rgba(155,108,255,.4),
 
-    font-size: 21px;
+        0 0 35px
+        rgba(155,108,255,.15);
 
-    line-height: 1.7;
+    transform:
+        translateY(-3px);
+}
 
-    color: #f7efff;
+
+.secret-text {
+
+    max-height: 0;
+
+    overflow: hidden;
 
     opacity: 0;
 
     transform:
-        translateY(15px);
+        translateY(-10px);
 
     transition:
-        opacity 0.8s ease,
-        transform 0.8s ease;
-
-    pointer-events: none;
+        max-height 1s ease,
+        opacity .8s ease,
+        transform .8s ease;
 }
 
-.hidden-message.show {
+
+.secret-text.show-secret {
+
+    max-height: 300px;
+
     opacity: 1;
 
     transform:
         translateY(0);
 
-    pointer-events: auto;
-
-    text-shadow:
-        0 0 10px rgba(200,160,255,0.2);
+    margin-top: 30px;
 }
 
 
-/* =========================================================
-   FINAL DIVIDER
-   ========================================================= */
+.secret-text p {
+
+    font-family: var(--serif);
+
+    font-size: 20px;
+
+    line-height: 1.8;
+
+    color: var(--lavender);
+
+    font-style: italic;
+
+    text-shadow:
+        0 0 12px
+        rgba(199,166,255,.25);
+}
+
+
+/* ============================================================
+   26. FINAL DIVIDER
+   ============================================================ */
 
 .final-divider {
-    width: 80%;
 
-    max-width: 800px;
+    display: flex;
+
+    align-items: center;
+
+    gap: 25px;
+
+    margin:
+        120px
+        0
+        100px;
+}
+
+
+.final-divider span {
 
     height: 1px;
 
-    margin: 50px auto;
+    flex: 1;
 
     background:
         linear-gradient(
-            to right,
+            90deg,
             transparent,
-            rgba(183,133,255,0.8),
-            transparent
+            rgba(155,108,255,.6)
         );
 
     box-shadow:
-        0 0 15px rgba(155,108,255,0.5);
+        0 0 8px
+        rgba(155,108,255,.5);
 }
 
 
-/* =========================================================
-   FINAL SECTION
-   ========================================================= */
+.final-divider span:last-child {
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(155,108,255,.6),
+            transparent
+        );
+}
+
+
+.divider-symbol {
+
+    font-size: 13px;
+
+    letter-spacing: 8px;
+
+    color: var(--light-purple);
+
+    text-shadow:
+        0 0 10px var(--purple);
+}
+
+
+/* ============================================================
+   27. FINAL SECTION
+   ============================================================ */
 
 .final-section {
-    min-height: 75vh;
+
+    min-height: 60vh;
 
     display: flex;
 
     flex-direction: column;
 
     align-items: center;
+
     justify-content: center;
 
     text-align: center;
-
-    padding: 100px 25px;
 }
 
 
 .final-message {
+
     font-family: var(--serif);
 
     font-size:
         clamp(
-            30px,
-            5vw,
-            60px
+            28px,
+            4vw,
+            48px
         );
-
-    color: #ffffff;
-
-    max-width: 750px;
-
-    line-height: 1.2;
-
-    text-shadow:
-        0 0 15px rgba(255,255,255,0.1),
-        0 0 30px rgba(155,108,255,0.2);
-
-    opacity: 0;
-
-    transform:
-        translateY(25px);
-
-    transition:
-        opacity 1.2s ease,
-        transform 1.2s ease;
-}
-
-.final-message.visible {
-    opacity: 1;
-
-    transform:
-        translateY(0);
-}
-
-
-/* =========================================================
-   FINAL ROSE
-   ========================================================= */
-
-.final-rose {
-    font-size: 70px;
-
-    margin-top: 45px;
-
-    cursor: pointer;
-
-    animation:
-        beatingRose 2.2s ease-in-out infinite;
-
-    filter:
-        drop-shadow(
-            0 0 12px rgba(255,110,170,0.7)
-        );
-
-    transition:
-        transform 0.3s ease;
-}
-
-.final-rose:hover {
-    transform:
-        scale(1.12);
-}
-
-@keyframes beatingRose {
-
-    0%,
-    100% {
-        transform: scale(1);
-    }
-
-    15% {
-        transform: scale(1.08);
-    }
-
-    30% {
-        transform: scale(1);
-    }
-
-    45% {
-        transform: scale(1.1);
-    }
-
-    60% {
-        transform: scale(1);
-    }
-}
-
-
-/* =========================================================
-   SIGNATURE
-   ========================================================= */
-
-.signature {
-    margin-top: 35px;
-
-    font-family: var(--serif);
-
-    font-size: 32px;
-
-    color: #d4bcff;
 
     font-style: italic;
 
-    opacity: 0;
-
-    transform:
-        translateY(20px);
-
-    transition:
-        opacity 1s ease,
-        transform 1s ease;
+    color: rgba(248,244,255,.85);
 
     text-shadow:
-        0 0 12px rgba(180,130,255,0.35);
-}
+        0 0 15px
+        rgba(155,108,255,.2);
 
-.signature.visible {
-    opacity: 1;
-
-    transform:
-        translateY(0);
+    max-width: 650px;
 }
 
 
-/* =========================================================
-   CLICK HEARTS
-   ========================================================= */
+/* ============================================================
+   28. FINAL ROSE
+   ============================================================ */
+
+.final-rose {
+
+    font-size: 65px;
+
+    margin-top: 50px;
+
+    cursor: pointer;
+
+    display: inline-block;
+
+    filter:
+        drop-shadow(
+            0 0 8px rgba(230,130,180,.5)
+        )
+        drop-shadow(
+            0 0 20px rgba(155,108,255,.35)
+        );
+
+    animation:
+        roseHeartbeat
+        1.8s
+        ease-in-out
+        infinite;
+
+    transition:
+        filter .4s ease;
+}
+
+
+@keyframes roseHeartbeat {
+
+    0%, 100% {
+
+        transform:
+            scale(1)
+            rotate(-2deg);
+
+    }
+
+    14% {
+
+        transform:
+            scale(1.08)
+            rotate(2deg);
+
+    }
+
+    28% {
+
+        transform:
+            scale(1)
+            rotate(-2deg);
+
+    }
+
+    42% {
+
+        transform:
+            scale(1.05)
+            rotate(1deg);
+
+    }
+
+    70% {
+
+        transform:
+            scale(1)
+            rotate(0deg);
+
+    }
+}
+
+
+.final-rose:hover {
+
+    filter:
+        drop-shadow(
+            0 0 12px rgba(240,150,200,.8)
+        )
+        drop-shadow(
+            0 0 35px rgba(155,108,255,.7)
+        );
+}
+
+
+.final-rose.rose-clicked {
+
+    animation:
+        roseBurst
+        .7s
+        ease;
+}
+
+
+@keyframes roseBurst {
+
+    0% {
+        transform: scale(1);
+    }
+
+    40% {
+        transform: scale(1.5);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+
+/* ============================================================
+   29. SIGNATURE
+   ============================================================ */
+
+.signature {
+
+    margin-top: 25px;
+
+    font-family: var(--serif);
+
+    font-size: 25px;
+
+    font-style: italic;
+
+    color: var(--lavender);
+
+    text-shadow:
+        0 0 10px
+        rgba(199,166,255,.4);
+}
+
+
+/* ============================================================
+   30. CLICK HEART EFFECT
+   ============================================================ */
 
 .click-heart {
+
     position: fixed;
 
-    z-index: 100;
+    z-index: 999;
 
     pointer-events: none;
 
-    color: #d19aff;
+    color: var(--light-purple);
 
-    font-size: 18px;
-
-    animation:
-        clickHeartFloat 1.4s ease-out forwards;
+    font-size: 20px;
 
     text-shadow:
-        0 0 8px #9b6cff,
-        0 0 18px rgba(155,108,255,0.8);
+        0 0 8px var(--purple),
+        0 0 20px var(--purple);
+
+    transform:
+        translate(-50%, -50%);
+
+    animation:
+        clickHeartAnimation
+        1.2s
+        ease-out
+        forwards;
 }
 
-@keyframes clickHeartFloat {
+
+@keyframes clickHeartAnimation {
 
     0% {
+
         opacity: 1;
 
         transform:
             translate(-50%, -50%)
-            scale(0.5);
+            scale(.5);
+    }
+
+    50% {
+
+        opacity: 1;
+
+        transform:
+            translate(-50%, -100px)
+            scale(1.2);
     }
 
     100% {
+
         opacity: 0;
+
+        transform:
+            translate(-50%, -160px)
+            scale(.5);
+    }
+}
+
+
+/* ============================================================
+   31. ROSE HEART BURST
+   ============================================================ */
+
+.rose-heart {
+
+    position: fixed;
+
+    z-index: 999;
+
+    pointer-events: none;
+
+    color: var(--rose-light);
+
+    font-size: 16px;
+
+    text-shadow:
+        0 0 10px var(--rose);
+
+    animation:
+        roseHeartBurst
+        1.2s
+        ease-out
+        forwards;
+}
+
+
+@keyframes roseHeartBurst {
+
+    0% {
+
+        transform:
+            translate(-50%, -50%)
+            scale(.3);
+
+        opacity: 0;
+    }
+
+    20% {
+
+        opacity: 1;
+
+        transform:
+            translate(-50%, -50%)
+            scale(1);
+    }
+
+    100% {
 
         transform:
             translate(
                 calc(-50% + var(--x)),
                 calc(-50% + var(--y))
             )
-            scale(1.3);
+            scale(.2);
+
+        opacity: 0;
     }
 }
 
 
-/* =========================================================
-   AMBIENT GLOWS
-   ========================================================= */
+/* ============================================================
+   32. AMBIENT GLOW
+   ============================================================ */
 
 .ambient-glow {
+
     position: fixed;
 
     width: 100px;
@@ -1194,171 +2110,305 @@ body::before {
     background:
         radial-gradient(
             circle,
-            rgba(160,100,255,0.12),
+            rgba(155,108,255,.15),
             transparent 70%
         );
 
-    filter: blur(20px);
+    filter: blur(15px);
 
-    z-index: 0;
+    transform:
+        translate(-50%, -50%)
+        scale(.3);
 
     animation:
-        ambientMove ease-in-out infinite alternate;
-}
-
-@keyframes ambientMove {
-
-    from {
-        transform:
-            scale(0.8)
-            translate(0,0);
-
-        opacity: 0.2;
-    }
-
-    to {
-        transform:
-            scale(1.5)
-            translate(50px,-30px);
-
-        opacity: 0.7;
-    }
+        ambientGlow
+        4s
+        ease-out
+        forwards;
 }
 
 
-/* =========================================================
-   FOOTER
-   ========================================================= */
+@keyframes ambientGlow {
 
-footer {
-    padding: 30px;
+    0% {
+
+        opacity: 0;
+
+        transform:
+            translate(-50%, -50%)
+            scale(.3);
+    }
+
+    40% {
+        opacity: 1;
+    }
+
+    100% {
+
+        opacity: 0;
+
+        transform:
+            translate(-50%, -50%)
+            scale(2.5);
+    }
+}
+
+
+/* ============================================================
+   33. FOOTER
+   ============================================================ */
+
+.site-footer {
+
+    padding:
+        70px
+        25px
+        40px;
 
     text-align: center;
 
+    color:
+        rgba(216,194,255,.35);
+
     font-size: 9px;
 
-    letter-spacing: 3px;
-
-    text-transform: uppercase;
-
-    color: rgba(210,190,240,0.5);
+    letter-spacing: 1px;
 }
 
 
-/* =========================================================
-   SECTION ACTIVE GLOW
-   ========================================================= */
+.site-footer span {
 
-.section-active {
-    transition:
-        filter 1s ease;
+    display: block;
+
+    margin-top: 15px;
+
+    color:
+        rgba(199,166,255,.5);
+
+    text-shadow:
+        0 0 10px var(--purple);
 }
 
 
-/* =========================================================
-   MOBILE
-   ========================================================= */
+/* ============================================================
+   34. MOBILE RESPONSIVENESS
+   ============================================================ */
 
 @media (max-width: 700px) {
 
-    .intro {
-        padding:
-            80px 20px;
+    .entrance-rose {
+        top: 10%;
+        font-size: 40px;
     }
+
+
+    .heart-entrance {
+
+        width: 180px;
+        height: 165px;
+
+    }
+
+
+    .heart-entrance::before,
+    .heart-entrance::after {
+
+        width: 120px;
+        height: 120px;
+
+    }
+
+
+    .heart-entrance::before {
+
+        left: 30px;
+
+    }
+
+
+    .heart-entrance::after {
+
+        top: 30px;
+
+    }
+
+
+    .heart-content h1 {
+
+        font-size: 34px;
+
+    }
+
+
+    .intro-section {
+
+        padding:
+            80px
+            20px;
+
+    }
+
+
+    .eyebrow {
+
+        font-size: 9px;
+
+        letter-spacing: 3px;
+
+    }
+
 
     .intro-description {
+
         font-size: 18px;
 
-        line-height: 1.7;
+        line-height: 1.65;
+
     }
 
-    .confession {
-        padding:
-            110px 22px
-            90px;
+
+    .intro-lines {
+
+        margin-top: 45px;
+
     }
+
+
+    .confession-section {
+
+        padding:
+            100px
+            20px
+            80px;
+
+    }
+
+
+    .background-title {
+
+        top: 70px;
+
+        font-size: 90px;
+
+    }
+
 
     .confession-heading {
-        font-size: 38px;
+
+        font-size: 36px;
+
     }
 
-    .letter {
-        padding:
-            0 4px;
-    }
 
     .letter-paragraph {
+
         font-size: 19px;
 
-        line-height: 1.85;
+        line-height: 1.8;
 
-        margin-bottom: 32px;
     }
+
+
+    .heart-divider {
+
+        margin:
+            45px
+            auto
+            55px;
+
+    }
+
+
+    .final-divider {
+
+        margin:
+            80px
+            0
+            70px;
+
+    }
+
 
     .final-message {
-        font-size: 35px;
+
+        font-size: 30px;
+
     }
+
 
     .final-rose {
-        font-size: 60px;
+
+        font-size: 55px;
+
     }
 
-    .signature {
-        font-size: 28px;
-    }
-
-    .heart-button {
-        transform:
-            scale(0.9);
-    }
-
-    .heart-button:hover {
-        transform:
-            scale(0.95);
-    }
 }
 
 
-/* =========================================================
-   SMALL PHONES
-   ========================================================= */
+/* ============================================================
+   35. VERY SMALL PHONES
+   ============================================================ */
 
 @media (max-width: 400px) {
 
-    .intro-title {
-        font-size: 55px;
+    .heart-entrance {
+
+        transform:
+            rotate(-45deg)
+            scale(.85);
+
     }
 
-    .intro-description {
-        font-size: 17px;
+
+    .heart-entrance:hover {
+
+        transform:
+            rotate(-45deg)
+            scale(.92);
+
     }
+
+
+    .main-title {
+
+        font-size: 52px;
+
+    }
+
 
     .confession-heading {
-        font-size: 34px;
+
+        font-size: 32px;
+
     }
+
 
     .letter-paragraph {
+
         font-size: 18px;
+
     }
 
-    .final-message {
-        font-size: 31px;
-    }
 }
 
 
-/* =========================================================
-   REDUCED MOTION
-   ========================================================= */
+/* ============================================================
+   36. REDUCED MOTION
+   ============================================================ */
 
-.reduced-motion *,
-.reduced-motion *::before,
-.reduced-motion *::after {
-    animation-duration: 0.01ms !important;
+@media (prefers-reduced-motion: reduce) {
 
-    animation-iteration-count: 1 !important;
+    *,
+    *::before,
+    *::after {
 
-    scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
 
-    transition-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+
+        scroll-behavior: auto !important;
+
+    }
+
 }
+```
