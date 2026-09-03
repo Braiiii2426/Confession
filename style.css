@@ -1198,21 +1198,17 @@ body {
    ============================================================ */
 
 .intro-description {
-
     max-width: 580px;
-
-    margin:
-        35px
-        auto
-        0;
+    margin: 35px auto 0;
 
     font-family: var(--serif);
-
     font-size: 20px;
-
     line-height: 1.7;
 
-    color: var(--soft-white);
+    color: #f3ecff;
+
+    text-shadow:
+        0 0 8px rgba(255,255,255,0.12);
 }
 
 
@@ -1581,9 +1577,12 @@ body {
 
     letter-spacing: .15px;
 
-    color: rgba(248,244,255,.78);
+    color: #f5efff;
 
     margin-bottom: 38px;
+
+    text-shadow:
+        0 0 6px rgba(255,255,255,0.08);
 
     transition:
         opacity 1s ease,
