@@ -62,7 +62,7 @@ body {
         ),
         radial-gradient(
             circle at 10% 80%,
-            rgba(90, 35, 150, 0.12),
+            rgba(90, 35, 150, 0.06),
             transparent 35%
         ),
         var(--background);
