@@ -1,389 +1,690 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
+// ============================================================
+// FOR YOU, AS ALWAYS
+// JavaScript
+// ============================================================
 
-    <!-- Makes the website work properly on phones -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>For You, As Always</title>
+// ============================================================
+// 1. ELEMENTS
+// ============================================================
 
-    <!-- Google Font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+const entrance = document.getElementById("entrance");
+const mainContent = document.getElementById("mainContent");
+const beginButton = document.getElementById("beginButton");
 
-    <!-- Our CSS -->
-    <link rel="stylesheet" href="style.css">
-</head>
+const revealButton = document.getElementById("revealButton");
+const secretText = document.getElementById("secretText");
 
-<body>
+const fallingEffects = document.getElementById("fallingEffects");
 
-    <!-- =====================================================
-         BACKGROUND EFFECT LAYER
-         ===================================================== -->
+// Background music
+const backgroundMusic = document.getElementById("backgroundMusic");
 
-    <div class="background-effects">
 
-        <!-- These will be animated later with CSS/JavaScript -->
-        <div class="falling-effects" id="fallingEffects"></div>
+// ============================================================
+// 2. WEBSITE STARTUP
+// ============================================================
 
-        <!-- Glowing decorative lines -->
-        <div class="glow-line line-one"></div>
-        <div class="glow-line line-two"></div>
-        <div class="glow-line line-three"></div>
+document.addEventListener("DOMContentLoaded", () => {
 
-    </div>
+    // Hide the main website when the page first loads
+    mainContent.style.display = "none";
 
+    // Create the falling atmosphere
+    createFallingEffects();
 
-    <!-- =====================================================
-         OPENING / ENTRANCE SCREEN
-         ===================================================== -->
+    // Create background particles
+    createBackgroundParticles();
 
-    <section id="entrance" class="entrance-screen">
+    // Prepare scroll animations
+    prepareScrollAnimations();
 
-        <!-- Floating rose -->
-        <div class="entrance-rose" id="entranceRose">
-            🌹
-        </div>
+});
 
-        <!-- Decorative particles surrounding the heart -->
-        <div class="heart-particles"></div>
 
-        <!-- Main heart entrance -->
-        <button class="heart-entrance" id="beginButton">
+// ============================================================
+// 3. OPENING HEART
+// ============================================================
 
-            <div class="heart-glow"></div>
+beginButton.addEventListener("click", () => {
 
-            <div class="heart-content">
+    // Prevent multiple clicks
+    beginButton.disabled = true;
 
-                <span class="heart-small-text">
-                    A little something
-                </span>
+    // Add the opening animation
+    entrance.classList.add("opening");
 
-                <h1>
-                    For You
-                </h1>
+    // Start background music
+    backgroundMusic.volume = 0.35;
+    backgroundMusic.play();
 
-            </div>
+    // Future sound effect goes here
+    //
+    // Example later:
+    //
+    // const clickSound = new Audio("sounds/click.mp3");
+    // clickSound.play();
 
-        </button>
+    // Wait for the entrance animation
+    setTimeout(() => {
 
-        <!-- Instruction -->
-        <p class="tap-text">
-            Tap To Begin
-        </p>
+        entrance.style.display = "none";
 
-        <!-- Small decorative line -->
-        <div class="entrance-divider">
-            <span></span>
-            <i>♥</i>
-            <span></span>
-        </div>
+        mainContent.style.display = "block";
 
-    </section>
+        // Small delay allows CSS animations to start properly
+        setTimeout(() => {
 
+            mainContent.classList.add("visible");
 
-    <!-- =====================================================
-         MAIN WEBSITE
-         Hidden until the heart is clicked
-         ===================================================== -->
+            // Start observing scroll animations
+            startScrollAnimations();
 
-    <main id="mainContent" class="main-content">
+        }, 100);
 
+    }, 1500);
 
-        <!-- =================================================
-             INTRODUCTION
-             ================================================= -->
+});
 
-        <section class="intro-section">
 
-            <div class="intro-content">
+// ============================================================
+// 4. EIGHT DIFFERENT FALLING EFFECTS
+// ============================================================
+//
+// Each effect has its own symbol, movement and behavior.
+//
+// 1. Hearts
+// 2. Roses
+// 3. Sparkles
+// 4. Stars
+// 5. Dots
+// 6. Petals
+// 7. Lavender diamonds
+// 8. Tiny glowing particles
+//
+// CSS will control most of the visual appearance.
+//
 
-                <p class="eyebrow">
-                    A Letter Written From The Heart
-                </p>
 
-                <h1 class="main-title">
-                    For <span>You</span>, As Always
-                </h1>
+// Available falling objects
+const fallingObjects = [
 
-                <p class="intro-description">
-                    Some feelings are too honest to keep silent.
-                    This one is for you - read it slowly, with an open heart.
-                </p>
+    {
+        type: "heart",
+        symbols: ["♥", "♡"]
+    },
 
-                <!-- Decorative glowing lines -->
-                <div class="intro-lines">
+    {
+        type: "rose",
+        symbols: ["🌹"]
+    },
 
-                    <div class="intro-line left"></div>
+    {
+        type: "sparkle",
+        symbols: ["✦", "✧", "✨"]
+    },
 
-                    <div class="read-on">
-                        <span>Read on</span>
-                    </div>
+    {
+        type: "star",
+        symbols: ["★", "☆"]
+    },
 
-                    <div class="intro-line right"></div>
+    {
+        type: "dot",
+        symbols: ["•", "·"]
+    },
 
-                </div>
+    {
+        type: "petal",
+        symbols: ["❀", "❁", "✿"]
+    },
 
-                <!-- Down arrow -->
-                <div class="scroll-indicator">
+    {
+        type: "diamond",
+        symbols: ["◆", "◇"]
+    },
 
-                    <span></span>
-                    <span></span>
+    {
+        type: "particle",
+        symbols: ["."]
+    }
 
-                </div>
+];
 
-            </div>
 
-        </section>
+// Generate one falling object
+function createFallingObject(effect) {
 
+    const element = document.createElement("span");
 
-        <!-- =================================================
-             CONFESSION SECTION
-             ================================================= -->
+    const randomSymbol =
+        effect.symbols[
+            Math.floor(Math.random() * effect.symbols.length)
+        ];
 
-        <section id="confession" class="confession-section">
+    element.classList.add(
+        "falling-object",
+        falling-${effect.type}
+    );
 
-            <!-- Huge faded background text -->
-            <div class="background-title">
-                My Confession
-            </div>
+    element.textContent = randomSymbol;
 
 
-            <div class="confession-content">
+    // Random horizontal starting position
+    element.style.left =
+        Math.random() * 100 + "vw";
 
-                <!-- Section label -->
-                <p class="section-label">
-                    My Confession
-                </p>
 
+    // Random size
+    const size =
+        Math.random() * 14 + 8;
 
-                <!-- Main confession heading -->
-                <h2 class="confession-heading">
-                    My Heart had already chosen you
-                    without me even realizing it.
-                </h2>
+    element.style.fontSize =
+        size + "px";
 
 
-                <!-- Heart divider -->
-                <div class="heart-divider">
+    // Random animation duration
+    const duration =
+        Math.random() * 7 + 6;
 
-                    <div class="divider-line"></div>
+    element.style.animationDuration =
+        duration + "s";
 
-                    <div class="divider-heart">
-                        ♥
-                    </div>
 
-                    <div class="divider-line"></div>
+    // Random delay
+    element.style.animationDelay =
+        Math.random() * 2 + "s";
 
-                </div>
 
+    // Random horizontal movement
+    const drift =
+        (Math.random() - 0.5) * 250;
 
-                <!-- =========================================
-                     LETTER
-                     ========================================= -->
+    element.style.setProperty(
+        "--drift",
+        drift + "px"
+    );
 
-                <article class="letter">
 
-                    <p class="letter-paragraph reveal-text">
-                        Maging kadete ng Philippine Merchant Marine Academy
-                        Maging kadete ng Philippine Military Academy
-                        Maging kadete ng Philippine National Police Academy
-                        Maging kadete ng Maritime Academy of Asia and the Pacific
-                        Maging 3/O, Lieutenant, ah basta
-                        
-                    </p>
+    // Random rotation
+    const rotation =
+        Math.random() * 720 - 360;
 
+    element.style.setProperty(
+        "--rotation",
+        rotation + "deg"
+    );
 
-                    <p class="letter-paragraph reveal-text">
-                        2nd paragraph
-                    </p>
 
+    fallingEffects.appendChild(element);
 
-                    <p class="letter-paragraph reveal-text">
-                        3rd paragraph
-                    </p>
 
+    // Remove it after the animation
+    setTimeout(() => {
 
-                    <p class="letter-paragraph reveal-text">
-                        4th paragraph
-                    </p>
+        element.remove();
 
+    }, (duration + 3) * 1000);
 
-                    <p class="letter-paragraph reveal-text">
-                        5h paragraph
-                    </p>
+}
 
 
-                    <p class="letter-paragraph reveal-text">
-                        6th paragraph
-                    </p>
+// Create all eight effects
+function createFallingEffects() {
 
+    fallingObjects.forEach(effect => {
 
-                    <!-- Hidden message -->
-                    <div class="hidden-message" id="hiddenMessage">
+        // Number of objects for each type
+        let amount = 3;
 
-                        <button class="reveal-button" id="revealButton">
-                            There is something else...
-                        </button>
+        if (effect.type === "dot") {
+            amount = 5;
+        }
 
-                        <div class="secret-text" id="secretText">
+        if (effect.type === "particle") {
+            amount = 7;
+        }
 
-                            <p>
-                                Some words are easier to write than to say.
-                                So here they are, quietly waiting for you.
-                            </p>
+        for (let i = 0; i < amount; i++) {
 
-                        </div>
+            createFallingObject(effect);
 
-                    </div>
+        }
 
+    });
 
-                </article>
 
+    // Continue generating objects
+    setTimeout(createFallingEffects, 2500);
 
-                <!-- =========================================
-                     FINAL DIVIDER
-                     ========================================= -->
+}
 
-                <div class="final-divider">
 
-                    <span></span>
+// ============================================================
+// 5. BACKGROUND PARTICLES
+// ============================================================
 
-                    <div class="divider-symbol">
-                        ✦ ♥ ✦
-                    </div>
+function createBackgroundParticles() {
 
-                    <span></span>
+    const particleContainer =
+        document.querySelector(".background-effects");
 
-                </div>
 
+    // Create 60 tiny particles
+    for (let i = 0; i < 60; i++) {
 
-                <!-- =========================================
-                     FINAL MESSAGE
-                     ========================================= -->
+        const particle =
+            document.createElement("span");
 
-                <section class="final-section">
 
-                    <p class="final-message">
-                        With all the sincerity my heart can offer.
-                    </p>
+        particle.classList.add(
+            "background-particle"
+        );
 
 
-                    <!-- Animated rose -->
-                    <div class="final-rose" id="finalRose">
-                        🌹
-                    </div>
+        // Random position
+        particle.style.left =
+            Math.random() * 100 + "%";
 
+        particle.style.top =
+            Math.random() * 100 + "%";
 
-                    <!-- Final signature -->
-                    <p class="signature">
-                        — Brynelle
-                    </p>
 
-                </section>
+        // Random size
+        const size =
+            Math.random() * 4 + 1;
 
-            </div>
+        particle.style.width =
+            size + "px";
 
-        </section>
+        particle.style.height =
+            size + "px";
 
 
-        <!-- =================================================
-             FOOTER
-             ================================================= -->
+        // Random animation delay
+        particle.style.animationDelay =
+            Math.random() * 5 + "s";
 
-        <footer class="site-footer">
 
-            <p>
-                Made with sincerity, a little courage,
-                and a heart full of words.
-            </p>
+        // Random animation speed
+        particle.style.animationDuration =
+            Math.random() * 5 + 4 + "s";
 
-            <span>♥</span>
 
-        </footer>
+        particleContainer.appendChild(
+            particle
+        );
 
-    </main>
+    }
 
+}
 
-    <!-- =====================================================
-         PERFECT MUSIC PLAYER
-         ===================================================== -->
 
-    <div class="music-player" id="musicPlayer">
+// ============================================================
+// 6. SCROLL REVEAL SYSTEM
+// ============================================================
 
-        <div class="music-glow"></div>
+function prepareScrollAnimations() {
 
+    const elements =
+        document.querySelectorAll(".reveal-text");
 
-        <!-- Spinning vinyl record -->
-        <div class="vinyl-container">
 
-            <div class="vinyl" id="vinyl">
+    elements.forEach(element => {
 
-                <div class="vinyl-grooves"></div>
+        element.classList.add(
+            "hidden-before-reveal"
+        );
 
-                <div class="vinyl-center">
-                    <span>♥</span>
-                </div>
+    });
 
-            </div>
+}
 
-        </div>
 
+// Start watching elements
+function startScrollAnimations() {
 
-        <!-- Music information -->
-        <div class="music-info">
+    const elements =
+        document.querySelectorAll(
+            ".hidden-before-reveal"
+        );
 
-            <span class="music-label">
-                Now Playing
-            </span>
 
-            <h3>
-                Perfect
-            </h3>
+    const observer =
+        new IntersectionObserver(
+            (entries) => {
 
-            <p>
-                Ed Sheeran
-            </p>
+                entries.forEach(entry => {
 
-        </div>
+                    if (entry.isIntersecting) {
 
+                        entry.target.classList.add(
+                            "revealed"
+                        );
 
-        <!-- Equalizer -->
-        <div class="music-equalizer" id="musicEqualizer">
+                        // Stop observing after revealing
+                        observer.unobserve(
+                            entry.target
+                        );
 
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
+                    }
 
-        </div>
+                });
 
+            },
+            {
+                threshold: 0.15
+            }
+        );
 
-        <!-- Play / pause button -->
-        <button
-            class="music-control"
-            id="musicControl"
-            aria-label="Play or pause music"
-        >
-            ▶
-        </button>
 
+    elements.forEach(element => {
 
-        <!-- Background music -->
-        <audio id="backgroundMusic" loop>
-            <source src="Perfect_music.mp3" type="audio/mpeg">
-        </audio>
+        observer.observe(element);
 
-    </div>
+    });
 
+}
 
-    <!-- Our JavaScript -->
-    <script src="script.js"></script>
 
-</body>
-</html>
+// ============================================================
+// 7. HIDDEN MESSAGE
+// ============================================================
+
+revealButton.addEventListener("click", () => {
+
+    // Reveal the secret text
+    secretText.classList.toggle(
+        "show-secret"
+    );
+
+
+    // Change button text
+    if (
+        secretText.classList.contains(
+            "show-secret"
+        )
+    ) {
+
+        revealButton.textContent =
+            "♥ A little more...";
+
+    } else {
+
+        revealButton.textContent =
+            "There is something else...";
+
+    }
+
+
+    // Future sound effect
+    //
+    // const revealSound =
+    //     new Audio("sounds/reveal.mp3");
+    //
+    // revealSound.play();
+
+});
+
+
+// ============================================================
+// 8. CLICKABLE HEART EFFECT
+// ============================================================
+
+document.addEventListener("click", (event) => {
+
+    // Don't create the effect when clicking
+    // the opening heart itself
+    if (
+        event.target.closest(
+            "#beginButton"
+        )
+    ) {
+        return;
+    }
+
+
+    createClickHeart(
+        event.clientX,
+        event.clientY
+    );
+
+});
+
+
+function createClickHeart(x, y) {
+
+    const heart =
+        document.createElement("span");
+
+
+    heart.classList.add(
+        "click-heart"
+    );
+
+
+    heart.textContent =
+        Math.random() > 0.5
+            ? "♥"
+            : "♡";
+
+
+    heart.style.left =
+        x + "px";
+
+    heart.style.top =
+        y + "px";
+
+
+    document.body.appendChild(
+        heart
+    );
+
+
+    // Remove after animation
+    setTimeout(() => {
+
+        heart.remove();
+
+    }, 1200);
+
+}
+
+
+// ============================================================
+// 9. SMOOTH SCROLL
+// ============================================================
+
+document.addEventListener("click", (event) => {
+
+    const readOn =
+        event.target.closest(".read-on");
+
+
+    if (!readOn) return;
+
+
+    const confession =
+        document.getElementById(
+            "confession"
+        );
+
+
+    confession.scrollIntoView({
+        behavior: "smooth"
+    });
+
+});
+
+
+// ============================================================
+// 10. FINAL ROSE INTERACTION
+// ============================================================
+
+const finalRose =
+    document.getElementById(
+        "finalRose"
+    );
+
+
+if (finalRose) {
+
+    finalRose.addEventListener(
+        "click",
+        () => {
+
+            finalRose.classList.add(
+                "rose-clicked"
+            );
+
+
+            // Create a burst of hearts
+            for (let i = 0; i < 12; i++) {
+
+                createRoseHeart(
+                    finalRose
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+function createRoseHeart(rose) {
+
+    const heart =
+        document.createElement("span");
+
+
+    heart.classList.add(
+        "rose-heart"
+    );
+
+
+    heart.textContent =
+        "♥";
+
+
+    // Position around the rose
+    const rect =
+        rose.getBoundingClientRect();
+
+
+    heart.style.left =
+        rect.left +
+        rect.width / 2 +
+        "px";
+
+
+    heart.style.top =
+        rect.top +
+        rect.height / 2 +
+        "px";
+
+
+    // Random direction
+    const angle =
+        Math.random() *
+        Math.PI *
+        2;
+
+
+    const distance =
+        Math.random() * 100 + 50;
+
+
+    heart.style.setProperty(
+        "--x",
+        Math.cos(angle) *
+        distance +
+        "px"
+    );
+
+
+    heart.style.setProperty(
+        "--y",
+        Math.sin(angle) *
+        distance +
+        "px"
+    );
+
+
+    document.body.appendChild(
+        heart
+    );
+
+
+    setTimeout(() => {
+
+        heart.remove();
+
+    }, 1200);
+
+}
+
+
+// ============================================================
+// 11. RANDOM GLOW PULSE
+// ============================================================
+//
+// Gives the background a subtle "alive" feeling.
+//
+
+
+// Occasionally create a glow
+setInterval(() => {
+
+    const glow =
+        document.createElement("div");
+
+
+    glow.classList.add(
+        "ambient-glow"
+    );
+
+
+    glow.style.left =
+        Math.random() * 100 + "vw";
+
+    glow.style.top =
+        Math.random() * 100 + "vh";
+
+
+    document.body.appendChild(
+        glow
+    );
+
+
+    setTimeout(() => {
+
+        glow.remove();
+
+    }, 4000);
+
+}, 3000);
+
+
+// ============================================================
+// 12. PREVENT ACCIDENTAL CONTEXT MENU
+// ============================================================
+//
+// Disabled for now.
+//
+// If you eventually publish the website, DON'T rely on this
+// as copyright protection. It doesn't actually protect files.
+//
+// document.addEventListener("contextmenu", e => {
+//     e.preventDefault();
+// });
+
+
+// ============================================================
+// END OF SCRIPT
+// ============================================================
+
+console.log(
+    "💜 For You, As Always — website initialized."
+);
