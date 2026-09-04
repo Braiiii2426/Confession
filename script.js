@@ -55,9 +55,14 @@ beginButton.addEventListener("click", () => {
     //
     // Example later:
     //
-    // const clickSound = new Audio("sounds/click.mp3");
-    // clickSound.play();
+  // Background music
+    const music = document.getElementById("backgroundMusic");
 
+    music.volume = 0.35;
+    music.play();
+
+// Wait for the entrance animation
+  
     // Wait for the entrance animation
     setTimeout(() => {
 
