@@ -17,6 +17,9 @@ const secretText = document.getElementById("secretText");
 
 const fallingEffects = document.getElementById("fallingEffects");
 
+// Background music
+const backgroundMusic = document.getElementById("backgroundMusic");
+
 
 // ============================================================
 // 2. WEBSITE STARTUP
@@ -51,18 +54,17 @@ beginButton.addEventListener("click", () => {
     // Add the opening animation
     entrance.classList.add("opening");
 
+    // Start background music
+    backgroundMusic.volume = 0.35;
+    backgroundMusic.play();
+
     // Future sound effect goes here
     //
     // Example later:
     //
-  // Background music
-    const music = document.getElementById("backgroundMusic");
+    // const clickSound = new Audio("sounds/click.mp3");
+    // clickSound.play();
 
-    music.volume = 0.35;
-    music.play();
-
-// Wait for the entrance animation
-  
     // Wait for the entrance animation
     setTimeout(() => {
 
