@@ -308,12 +308,78 @@
 
 
     <!-- =====================================================
-         BACKGROUND MUSIC
+         PERFECT MUSIC PLAYER
          ===================================================== -->
 
-    <audio id="backgroundMusic" loop>
-        <source src="Perfect_music.mp3" type="audio/mpeg">
-    </audio>
+    <div class="music-player" id="musicPlayer">
+
+        <div class="music-glow"></div>
+
+
+        <!-- Spinning vinyl record -->
+        <div class="vinyl-container">
+
+            <div class="vinyl" id="vinyl">
+
+                <div class="vinyl-grooves"></div>
+
+                <div class="vinyl-center">
+                    <span>♥</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Music information -->
+        <div class="music-info">
+
+            <span class="music-label">
+                Now Playing
+            </span>
+
+            <h3>
+                Perfect
+            </h3>
+
+            <p>
+                Ed Sheeran
+            </p>
+
+        </div>
+
+
+        <!-- Equalizer -->
+        <div class="music-equalizer" id="musicEqualizer">
+
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </div>
+
+
+        <!-- Play / pause button -->
+        <button
+            class="music-control"
+            id="musicControl"
+            aria-label="Play or pause music"
+        >
+            ▶
+        </button>
+
+
+        <!-- Background music -->
+        <audio id="backgroundMusic" loop>
+            <source src="Perfect_music.mp3" type="audio/mpeg">
+        </audio>
+
+    </div>
 
 
     <!-- Our JavaScript -->
