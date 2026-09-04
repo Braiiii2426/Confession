@@ -164,7 +164,7 @@ function createFallingObject(effect) {
 
     element.classList.add(
         "falling-object",
-        falling-${effect.type}
+        `falling-${effect.type}`
     );
 
     element.textContent = randomSymbol;
