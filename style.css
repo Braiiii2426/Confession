@@ -361,7 +361,7 @@ body {
 
     filter:
         drop-shadow(
-            0 0 8px rgba(235, 130, 180, .😎
+            0 0 8px rgba(235, 130, 180, .8)
         );
 }
 
@@ -1913,7 +1913,7 @@ body {
 
     filter:
         drop-shadow(
-            0 0 12px rgba(240,150,200,.😎
+            0 0 12px rgba(240,150,200,.8)
         )
         drop-shadow(
             0 0 35px rgba(155,108,255,.7)
